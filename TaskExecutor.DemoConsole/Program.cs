@@ -16,7 +16,7 @@ internal static class Program
         Console.WriteLine();
         Console.WriteLine(@"Running 1 ""Hello"" task at a time (from a total of 3)...");
 
-        await TaskExecutor.Run(new[] { Action1, Action1, Action1 });
+        await TaskEx.Run(new[] { Action1, Action1, Action1 });
 
         Console.WriteLine();
         Console.WriteLine(@"Running 10 ""Hi"" tasks at a time (from a total of 50)...");
@@ -26,7 +26,7 @@ internal static class Program
         // OR cast in expression
         var actions = Enumerable.Range(0, 50).Select(_ => (Func<Task<int>>)Action2);
 
-        await TaskExecutor.Run(actions, 10);
+        await TaskEx.Run(actions, 10);
 
         Console.WriteLine();
         Console.WriteLine("Running 4 tasks at a time (from a total of 17)...");
@@ -34,7 +34,7 @@ internal static class Program
         var getSchoolAsync = GetSchoolAsync;
         var schoolActions = Enumerable.Range(0, 17).Select(_ => getSchoolAsync);
 
-        var schools = await TaskExecutor.Run(schoolActions, 4);
+        var schools = await TaskEx.Run(schoolActions, 4);
 
         Console.WriteLine();
         Console.WriteLine($"General Students Total: {schools.Sum(x => x.TotalStudents)}");
@@ -42,14 +42,14 @@ internal static class Program
         Console.WriteLine();
 
         var func = () => Action3("John");
-        await TaskExecutor.Run(new[] { func });
+        await TaskEx.Run(new[] { func });
 
         // Run asynchronous task synchronously
         Console.WriteLine();
         Console.WriteLine("Running asynchronous task synchronously...");
 
-        TaskExecutor.RunSync(Action1);
-        var result = TaskExecutor.RunSync(Action2);
+        TaskEx.RunSync(Action1);
+        var result = TaskEx.RunSync(Action2);
     }
 
     static async Task Action1()

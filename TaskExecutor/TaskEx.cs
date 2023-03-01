@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TaskExecutor;
 
-public static class TaskExecutor
+public static class TaskEx
 {
     private static readonly TaskFactory _myTaskFactory = new(CancellationToken.None,
         TaskCreationOptions.None, TaskContinuationOptions.None, TaskScheduler.Default);
