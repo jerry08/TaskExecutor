@@ -39,8 +39,15 @@ internal static class Program
         Console.WriteLine();
         Console.WriteLine($"General Students Total: {schools.Sum(x => x.TotalStudents)}");
 
+        Console.WriteLine();
+
+        var func = () => Action3("John");
+        await TaskExecutor.Run(new[] { func });
+
         // Run asynchronous task synchronously
+        Console.WriteLine();
         Console.WriteLine("Running asynchronous task synchronously...");
+
         TaskExecutor.RunSync(Action1);
         var result = TaskExecutor.RunSync(Action2);
     }
@@ -59,6 +66,18 @@ internal static class Program
 
         HelloCount++;
         Console.WriteLine($"Hello ({HelloCount})");
+
+        return 0;
+    }
+
+    static async Task<int> Action3(string message)
+    {
+        await Task.Delay(1000);
+
+        HelloCount++;
+        Console.WriteLine($"Hello - {message} ({HelloCount})");
+
+        await Task.Delay(1000);
 
         return 0;
     }
