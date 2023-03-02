@@ -26,6 +26,7 @@ var actions = Enumerable.Range(0, 11).Select(_ => myAction);
 // This runs 2 tasks at a time and wait unitl all tasks are completed.
 var result = await TaskExecutor.Run(actions, 2);
 
+static int HelloCount;
 async Task<int> MyActionAsync()
 {
     await Task.Delay(1000);
