@@ -19,12 +19,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskExecutor;
 
 var myAction = MyActionAsync;
 var actions = Enumerable.Range(0, 11).Select(_ => myAction);
 
 // This runs 2 tasks at a time and wait unitl all tasks are completed.
-var result = await TaskExecutor.Run(actions, 2);
+var result = await TaskEx.Run(actions, 2);
 
 async Task<int> MyActionAsync()
 {
