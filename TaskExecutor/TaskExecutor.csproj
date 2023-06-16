@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net5.0;net6.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <Description>TasExecutor makes it easier to run multiple tasks simultaneously by using of Semaphore.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(TargetFramework.Contains('net5')) != true">
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
     <Compile Remove="**\**\*.net5.cs" />
     <None Include="**\**\*.net5.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     <Compile Remove="**\net5\**\*.cs" />
     <None Include="**\net5\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(TargetFramework.Contains('netstandard')) != true">
+  <ItemGroup Condition="$(TargetFramework.Contains('netstandard')) != true AND '$(TargetFrameworkIdentifier)' != '.NETFramework'">
     <Compile Remove="**\**\*.netstandard.cs" />
     <None Include="**\**\*.netstandard.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     <Compile Remove="**\netstandard\**\*.cs" />
