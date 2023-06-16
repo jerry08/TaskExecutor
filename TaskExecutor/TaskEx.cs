@@ -38,21 +38,24 @@ public static class TaskEx
 
     public static Task<TResult[]> Run<TResult>(
         IEnumerable<Func<Task<TResult>>> actions,
-        int maxCount = 1)
+        int maxCount = 1,
+        IProgress<double>? progress = null)
     {
-        return InternalRun(actions.ToArray(), maxCount);
+        return InternalRun(actions.ToArray(), maxCount, progress);
     }
 
     public static Task Run(
         IEnumerable<Func<Task>> actions,
-        int maxCount = 1)
+        int maxCount = 1,
+        IProgress<double>? progress = null)
     {
-        return InternalRun(actions.ToArray(), maxCount);
+        return InternalRun(actions.ToArray(), maxCount, progress);
     }
 
     private static Task<TResult[]> InternalRun<TResult>(
         Func<Task<TResult>>[] actions,
-        int maxCount = 1)
+        int maxCount = 1,
+        IProgress<double>? progress = null)
     {
         var semaphore = new ResizableSemaphore
         {
@@ -63,7 +66,9 @@ public static class TaskEx
             Task.Run(async () =>
             {
                 using var access = await semaphore.AcquireAsync();
-                return await actions[i]();
+                var result = await actions[i]();
+                progress?.Report(i);
+                return result;
             })).ToArray();
 
         return Task.WhenAll(newTasks);
@@ -71,7 +76,8 @@ public static class TaskEx
 
     private static Task InternalRun(
         Func<Task>[] actions,
-        int maxCount = 1)
+        int maxCount = 1,
+        IProgress<double>? progress = null)
     {
         var semaphore = new ResizableSemaphore
         {
@@ -83,6 +89,7 @@ public static class TaskEx
             {
                 using var access = await semaphore.AcquireAsync();
                 await actions[i]();
+                progress?.Report(i);
             })).ToArray();
 
         return Task.WhenAll(newTasks);
