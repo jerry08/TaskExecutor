@@ -62,12 +62,17 @@ public static class TaskEx
             MaxCount = maxCount
         };
 
+        var totalCompleted = 0;
+
         var newTasks = Enumerable.Range(0, actions.Length).Select(i =>
             Task.Run(async () =>
             {
                 using var access = await semaphore.AcquireAsync();
+
                 var result = await actions[i]();
-                progress?.Report(i);
+                totalCompleted++;
+                progress?.Report(totalCompleted);
+
                 return result;
             })).ToArray();
 
@@ -84,12 +89,16 @@ public static class TaskEx
             MaxCount = maxCount
         };
 
+        var totalCompleted = 0;
+
         var newTasks = Enumerable.Range(0, actions.Length).Select(i =>
             Task.Run(async () =>
             {
                 using var access = await semaphore.AcquireAsync();
+
                 await actions[i]();
-                progress?.Report(i);
+                totalCompleted++;
+                progress?.Report(totalCompleted);
             })).ToArray();
 
         return Task.WhenAll(newTasks);
