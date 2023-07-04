@@ -19,7 +19,7 @@ public partial class ResizableSemaphore : IDisposable
                 {
                     var waiter = _waiters.Dequeue();
 
-                    // Don't increment if the waiter has ben canceled
+                    // Don't increment if the waiter has been canceled
                     if (waiter.TrySetResult(true))
                         _count++;
                 }
